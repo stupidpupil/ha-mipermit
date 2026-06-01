@@ -158,21 +158,24 @@ class MiPermitBrowser:
         await cdp.wait_for_load(timeout=NAV_TIMEOUT)
         _LOGGER.debug("Navigated to VisitorsManagement for operator: %s", operator)
 
+
     async def _scrape_active_permits(self, cdp: "CDPSession") -> list[dict[str, str]]:
-        """Scrape the active permits table and return active rows only."""
-        await cdp.wait_for_element("table", timeout=ELEMENT_TIMEOUT)
+        """Scrape the permits table and return active rows only."""
+        await cdp.wait_for_element("#tblVisitorsCurrentBody", timeout=ELEMENT_TIMEOUT)
 
         rows: list[dict] = await cdp.evaluate("""
             () => {
                 const results = [];
-                const rows = Array.from(document.querySelectorAll("table tr"));
+                const rows = Array.from(document.querySelectorAll("#tblVisitorsCurrentBody tr"));
                 for (const row of rows) {
-                    const cells = Array.from(row.querySelectorAll("td"));
-                    if (cells.length < 3) continue;
 
-                    const registration = cells[0].innerText.trim();
-                    const valid = cells[1].innerText.trim();
-                    const thirdCell = cells[2].innerText.trim();
+                    const innerTextForCellIdStartsWith = function(startsWith){
+                        return row.querySelector("[id^="+startsWith+"]").innerText.trim();
+                    }
+
+                    const registration = innerTextForCellIdStartsWith("tdVisitorsCurrentVehicle")
+                    const valid = innerTextForCellIdStartsWith("tdVisitorsCurrentValid")
+                    const thirdCell = innerTextForCellIdStartsWith("tdVisitorsCurrentRemainingTime")
 
                     if (!thirdCell.includes("Active")) continue;
 
@@ -181,10 +184,17 @@ class MiPermitBrowser:
                         ? parts[0].trim()
                         : thirdCell;
 
+                    const permitId = innerTextForCellIdStartsWith("tdVisitorsCurrentStayID")
+                    const validFrom = innerTextForCellIdStartsWith("tdVisitorsCurrentDateFrom")
+                    const validTo = innerTextForCellIdStartsWith("tdVisitorsCurrentDateTo")
+
                     results.push({
+                        permitId,
                         registration,
                         valid,
                         remaining_time,
+                        validFrom,
+                        validTo,
                         status: "Active"
                     });
                 }

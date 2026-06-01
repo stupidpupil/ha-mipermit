@@ -1,0 +1,58 @@
+get_permits:
+  name: Get Visitor Permits
+  description: >
+    Retrieves all currently active visitor permits for the given Car Park Operator
+    from MiPermit.
+  fields:
+    operator:
+      name: Car Park Operator
+      description: >
+        The exact name of the Car Park Operator as shown on the MiPermit website
+        (e.g. "Cardiff City Council").
+      required: true
+      example: "Cardiff City Council"
+      selector:
+        text:
+
+activate_permit:
+  name: Activate Visitor Permit
+  description: >
+    Activates a new visitor permit for the given vehicle registration on MiPermit.
+  fields:
+    operator:
+      name: Car Park Operator
+      description: >
+        The exact name of the Car Park Operator as shown on the MiPermit website
+        (e.g. "Cardiff City Council").
+      required: true
+      example: "Cardiff City Council"
+      selector:
+        text:
+    registration:
+      name: Vehicle Registration
+      description: >
+        The vehicle registration number to issue the permit for (e.g. "BD51SMR").
+      required: true
+      example: "BD51SMR"
+      selector:
+        text:
+    permit_type:
+      name: Permit Type
+      description: >
+        A case-sensitive regular expression matched against the permit type option
+        text to select the correct permit type (e.g. "Red").
+      required: true
+      example: "Red"
+      selector:
+        text:
+    duration:
+      name: Duration (hours)
+      description: >
+        The duration of the permit in whole hours (e.g. 1 for 1 hour, 4 for 4 hours).
+      required: true
+      example: 1
+      selector:
+        number:
+          min: 1
+          max: 100
+          unit_of_measurement: hours

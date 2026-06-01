@@ -1,0 +1,29 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "MiPermit Login",
+        "description": "Enter your MiPermit account credentials.",
+        "data": {
+          "username": "Phone/Email/Username",
+          "password": "Password"
+        }
+      },
+      "cdp": {
+        "title": "Browserless Connection",
+        "description": "Enter the WebSocket URL of your Browserless Chrome add-on. If you installed it from the alexbelgium repository with the default port, the value below should be correct.",
+        "data": {
+          "cdp_url": "Browserless CDP WebSocket URL"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid Username or Password. Please check your credentials.",
+      "cannot_connect": "Unable to connect. Check that the Browserless Chrome add-on is running and the CDP URL is correct.",
+      "unknown": "An unexpected error occurred. See logs for details."
+    },
+    "abort": {
+      "already_configured": "This MiPermit account is already configured."
+    }
+  }
+}

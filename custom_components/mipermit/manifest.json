@@ -1,0 +1,11 @@
+{
+  "domain": "mipermit",
+  "name": "MiPermit",
+  "codeowners": ["@stupidpupil"],
+  "config_flow": true,
+  "documentation": "https://github.com/stupidpupil/ha-mipermit",
+  "issue_tracker": "https://github.com/stupidpupil/ha-mipermit/issues",
+  "requirements": [],
+  "iot_class": "cloud_polling",
+  "version": "1.0.0"
+}

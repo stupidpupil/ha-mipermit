@@ -1,0 +1,6 @@
+{
+  "services": {
+    "get_permits": {"service": "mdi:cash-multiple"},
+    "activate_permit": {"service": "mdi:cash-clock"}
+  }
+}

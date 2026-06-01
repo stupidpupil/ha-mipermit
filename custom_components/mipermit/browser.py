@@ -172,7 +172,7 @@ class MiPermitBrowser:
                 const zonedDateTimeFromMiPermitDateTime = function(mpdt){
                     const info = {
                         ... mpdtRegExp.exec(mpdt).groups,
-                        timeZone = "Europe/London"
+                        timeZone: "Europe/London"
                     };
 
                     return Temporal.ZonedDateTime.from(info);
@@ -211,9 +211,9 @@ class MiPermitBrowser:
                         registration,
                         valid,
                         remaining_time,
-                        status: "Active",
                         validFrom,
-                        validTo
+                        validTo,
+                        status: "Active"
                     });
                 }
                 return results;

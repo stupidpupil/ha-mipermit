@@ -207,8 +207,8 @@ class MiPermitBrowser:
                         : thirdCell;
 
                     const permitId = innerTextForCellIdStartsWith("tdVisitorsCurrentStayID");
-                    const validFrom = innerTextForCellIdStartsWith("tdVisitorsCurrentDateFrom");
-                    const validTo = innerTextForCellIdStartsWith("tdVisitorsCurrentDateTo");
+                    const validFrom = haDateTimeFromMiPermitDateTime(innerTextForCellIdStartsWith("tdVisitorsCurrentDateFrom"));
+                    const validTo = haDateTimeFromMiPermitDateTime(innerTextForCellIdStartsWith("tdVisitorsCurrentDateTo"));
 
                     results.push({
                         permitId,

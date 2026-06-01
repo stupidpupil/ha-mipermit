@@ -166,6 +166,23 @@ class MiPermitBrowser:
         rows: list[dict] = await cdp.evaluate("""
             () => {
                 const results = [];
+
+                const mpdtRegExp = /(?<day>\\d{2})\\/(?<month>\\d{2})\\/(?<year>\\d{4}) (?<hour>\\d{2}):(?<minute>\\d{2}):(?<second>\\d{2})/
+
+                const zonedDateTimeFromMiPermitDateTime = function(mpdt){
+                    const info = {
+                        ... mpdtRegExp.exec(mpdt).groups,
+                        timeZone = "Europe/London"
+                    };
+
+                    return Temporal.ZonedDateTime.from(info);
+                }
+
+                const haDateTimeFromMiPermitDateTime = function(mpdt){
+                    const zdt = zonedDateTimeFromMiPermitDateTime(mpdt);
+                    return zdt.toString({timeZoneName:"never"});
+                }
+
                 const rows = Array.from(document.querySelectorAll("#tblVisitorsCurrentBody tr"));
                 for (const row of rows) {
 
@@ -173,9 +190,10 @@ class MiPermitBrowser:
                         return row.querySelector("[id^="+startsWith+"]").innerText.trim();
                     }
 
-                    const registration = innerTextForCellIdStartsWith("tdVisitorsCurrentVehicle")
-                    const valid = innerTextForCellIdStartsWith("tdVisitorsCurrentValid")
-                    const thirdCell = innerTextForCellIdStartsWith("tdVisitorsCurrentRemainingTime")
+
+                    const registration = innerTextForCellIdStartsWith("tdVisitorsCurrentVehicle");
+                    const valid = innerTextForCellIdStartsWith("tdVisitorsCurrentValid");
+                    const thirdCell = innerTextForCellIdStartsWith("tdVisitorsCurrentRemainingTime");
 
                     if (!thirdCell.includes("Active")) continue;
 
@@ -184,18 +202,18 @@ class MiPermitBrowser:
                         ? parts[0].trim()
                         : thirdCell;
 
-                    const permitId = innerTextForCellIdStartsWith("tdVisitorsCurrentStayID")
-                    const validFrom = innerTextForCellIdStartsWith("tdVisitorsCurrentDateFrom")
-                    const validTo = innerTextForCellIdStartsWith("tdVisitorsCurrentDateTo")
+                    const permitId = innerTextForCellIdStartsWith("tdVisitorsCurrentStayID");
+                    const validFrom = haDateTimeFromMiPermitDateTime(innerTextForCellIdStartsWith("tdVisitorsCurrentDateFrom"));
+                    const validTo = haDateTimeFromMiPermitDateTime(innerTextForCellIdStartsWith("tdVisitorsCurrentDateTo"));
 
                     results.push({
                         permitId,
                         registration,
                         valid,
                         remaining_time,
+                        status: "Active",
                         validFrom,
-                        validTo,
-                        status: "Active"
+                        validTo
                     });
                 }
                 return results;

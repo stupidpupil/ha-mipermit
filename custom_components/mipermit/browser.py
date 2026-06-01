@@ -179,7 +179,7 @@ class MiPermitBrowser:
                 }
 
                 const haDateTimeFromMiPermitDateTime = function(mpdt){
-                    const zdt = zonedDateTimeFromMiPermitDateTime(mpdt);
+                    const zdt = zonedDateTimeFromMiPermitDateTime(mpdt); 
                     return zdt.toString({timeZoneName:"never"});
                 }
 
@@ -189,7 +189,6 @@ class MiPermitBrowser:
                     const innerTextForCellIdStartsWith = function(startsWith){
                         return row.querySelector("[id^="+startsWith+"]").innerText.trim();
                     }
-
 
                     const registration = innerTextForCellIdStartsWith("tdVisitorsCurrentVehicle");
                     const valid = innerTextForCellIdStartsWith("tdVisitorsCurrentValid");
@@ -203,8 +202,8 @@ class MiPermitBrowser:
                         : thirdCell;
 
                     const permitId = innerTextForCellIdStartsWith("tdVisitorsCurrentStayID");
-                    const validFrom = haDateTimeFromMiPermitDateTime(innerTextForCellIdStartsWith("tdVisitorsCurrentDateFrom"));
-                    const validTo = haDateTimeFromMiPermitDateTime(innerTextForCellIdStartsWith("tdVisitorsCurrentDateTo"));
+                    const validFrom = innerTextForCellIdStartsWith("tdVisitorsCurrentDateFrom");
+                    const validTo = innerTextForCellIdStartsWith("tdVisitorsCurrentDateTo");
 
                     results.push({
                         permitId,

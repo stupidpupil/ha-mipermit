@@ -170,8 +170,12 @@ class MiPermitBrowser:
                 const mpdtRegExp = /(?<day>\\d{2})\\/(?<month>\\d{2})\\/(?<year>\\d{4}) (?<hour>\\d{2}):(?<minute>\\d{2}):(?<second>\\d{2})/
 
                 const zonedDateTimeFromMiPermitDateTime = function(mpdt){
+                    const match = mpdtRegExp.exec(mpdt);
+
+                    if (match == null) return null;
+
                     const info = {
-                        ... mpdtRegExp.exec(mpdt).groups,
+                        ... match.groups,
                         timeZone: "Europe/London"
                     };
 
@@ -180,6 +184,7 @@ class MiPermitBrowser:
 
                 const haDateTimeFromMiPermitDateTime = function(mpdt){
                     const zdt = zonedDateTimeFromMiPermitDateTime(mpdt); 
+                    if (zdt == null) return null;
                     return zdt.toString({timeZoneName:"never"});
                 }
 
